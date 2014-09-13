@@ -22,6 +22,9 @@
       h1{
 	text-align:center;
       }
+      div{
+	text-align:center;
+      }
     </style>
   </head>
   <body>
@@ -104,14 +107,14 @@
    var getPosts = function (response){
           for (element in response.data){
             post = response.data[element]
-            if(post.hasOwnProperty('message'))
-	      console.log(post.from.name + ": " +post.message);          
+            if(post.hasOwnProperty('message')&&!post.hasOwnProperty('to')){
+	      console.log(post.from.name + ": " +post.message);  
+	      console.log(post);}
           }
           if(i < 4){
               nextPage = response.paging.next;        
               i++;
-              //Method 1: I use it.
-              $.get(nextPage, getPosts, "json"); //optional: $.getJSON can be use instead
+              $.get(nextPage, getPosts, "json");
           }
 
       }
