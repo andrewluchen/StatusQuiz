@@ -8,12 +8,21 @@ function onLogin() {
   console.log('Welcome!  Fetching your information.... ');
   
   user = Parse.User.current();
-  user.set("fbId", user.getUsername());
-  
   fetchStatuses();
 }
 
 function fetchStatuses() {
+  FB.api("/me", function (response) {
+    if (response && !response.error) {
+      user.set("fbId", response.id);
+      user.save(); 
+    }
+  });
+  FB.api("/me/friends", function (response) {
+    if (response && !response.error) {
+    }
+  });
+  
   FB.api("/me/home", getPosts);
 }
 
