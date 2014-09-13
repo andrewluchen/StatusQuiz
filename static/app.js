@@ -1,7 +1,27 @@
 Parse.initialize("ONeIYsbSCtIJg6bo0M823t6Z8ZqmqEM4Zfgh2U5a", "A1lJ2mF6YV48qcO5KBkQ1XCEC2BDF3mAt1MlqqlB");
 
+var pagesGrabbed = 0;
+var postslist = [];
+
+function getPosts(response){
+  for (element in response.data){
+    post = response.data[element]
+    if(post.hasOwnProperty('message')&&!post.hasOwnProperty('to')&&!post.from.hasOwnProperty('category')){
+      console.log(post.from.name + ": " +post.message);  
+      console.log(post);
+      postslist.push({name:post.from.name, nameid:post.from.id, message:post.message, postid:post.id});
+    }
+  }
+  if(pagesGrabbed < 4){
+    nextPage = response.paging.next;        
+    pagesGrabbed++;
+    $.get(nextPage, getPosts, "json");
+  } else {
+    updateText();
+  }
+}
+
 var prevPosts = [];
-var postslist = null;
 var chosen = 10;
 var alreadyChosen = true;
 var user = Parse.User.current();
