@@ -1,13 +1,17 @@
 {% include 'header.html' %}
     <h1>WhO Said dAT SHEET?!</h1>
     <div class="row">
-      <div class="large-6 columns">
-      <button onClick="checkLoginState();">Fetch</button>
+      <div class="large-4 columns">
+      <button onClick="checkLoginState();">Fetch Statuses</button>
       </div>
-      <div class="large-6 columns">
+      <div class="large-4 columns">
+      <button id="next" onClick="updateText();" disabled>Next Status!</button>
+      </div>
+      <div class="large-4 columns">
       <fb:login-button show_faces="true" scope="public_profile,email,read_stream,user_friends" onlogin="checkLoginState();">
       </fb:login-button>
       </div>
+      
     </div>
     <div class="row">
       <div class="panel">

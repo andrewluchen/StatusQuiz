@@ -113,7 +113,7 @@
       if(post.hasOwnProperty('message')&&!post.hasOwnProperty('to')&&!post.from.hasOwnProperty('category')){
         console.log(post.from.name + ": " +post.message);  
         console.log(post);
-        postlist.push({name:post.from.name, nameid:post.from.id, message:post.message});
+        postlist.push({name:post.from.name, nameid:post.from.id, message:post.message, postid:post.id});
       }
     }
     if(i < 4){
@@ -121,7 +121,9 @@
       i++;
       $.get(nextPage, getPosts, "json");
     } else {
-      updateText(postlist);
+      postslist = postlist;
+      updateText();
+      $('#next').prop('disabled', false);
     }
   }
    

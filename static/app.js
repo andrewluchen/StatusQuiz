@@ -1,6 +1,8 @@
 Parse.initialize("ONeIYsbSCtIJg6bo0M823t6Z8ZqmqEM4Zfgh2U5a", "A1lJ2mF6YV48qcO5KBkQ1XCEC2BDF3mAt1MlqqlB");
 
-function updateText(postslist) {
+var prevPosts = [];
+var postslist = null;
+function updateText() {
   var arr = [];
   for(var i = 0; i < 4; i++) {
     var addpost = function(){
@@ -14,6 +16,11 @@ function updateText(postslist) {
     addpost();
   }
   var chosen = Math.floor((Math.random() * 4));
+  for(var k = 0;k<prevPosts.length;k++){
+      if(arr[chosen].postid===prevPosts[k])
+	chosen = Math.floor((Math.random() * 4));
+  }
+  prevPosts.push(chosen);
   var message = arr[chosen].message + " answer:" + arr[chosen].name;
   $('#statusPost').text(message);
   $('#img1').attr('src',"https://graph.facebook.com/" + arr[0].nameid + "/picture?type=large");
