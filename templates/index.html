@@ -1,16 +1,15 @@
 {% include 'header.html' %}
     <h1>WhO Said dAT SHEET?!</h1>
     <div>
-    <fb:login-button show_faces="true" scope="public_profile,email,read_stream,user_friends" onlogin="checkLoginState();">
-    </fb:login-button>
+      <fb:login-button show_faces="true" scope="public_profile,email,read_stream,user_friends" onlogin="checkLoginState();">
+      </fb:login-button>
     </div>
     <div>
-    <button onClick="checkLoginState();">Fetch
-    </button>
+      <button onClick="checkLoginState();">Fetch</button>
     </div>
     <div class="row">
       <div class="panel">
-	<h2>Status goes here</h2>
+	      <h2 id="statusPost">Status goes here</h2>
       </div>
     </div>
 
