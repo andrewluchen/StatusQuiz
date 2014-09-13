@@ -188,7 +188,7 @@ function correctAns(num){
 			score-=5;
 		}
     user.increment("statusesShown");
-    user.set("accuracy", Math.round(correctAnswers / (statusesShown) * 100));
+    user.set("accuracy", Math.round(user.get("correctAnswers") / user.get("statusesShown") * 100));
 		user.save();
 	}
   $('#scorelabel').text(score);
