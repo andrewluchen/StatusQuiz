@@ -4,8 +4,8 @@ from jinja2.environment import Environment
 import os, json
 
 app = Flask(__name__)
-#app.jinja_env.variable_start_string = '{|'
-#app.jinja_env.variable_end_string = '|}'
+app.jinja_env.variable_start_string = '{|'
+app.jinja_env.variable_end_string = '|}'
 
 @app.route('/')
 def index():
