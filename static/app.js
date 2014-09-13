@@ -8,32 +8,31 @@ function onLogin() {
   FB.api("/me", function (response) {
     if (response && !response.error) {
       user.set("fbId", response.id);
+      user.set("name", response.first_name + " " + response.last_name);
       user.save(); 
     }
   });
   fetchStatuses();
 }
 
-// Scoreboard stuff
-
-var UserScores = Parse.Collection.extend({
-  model: Parse.User
-});
-
-new UserScores().fetch({
-  success: function(collection) {
-    str = "";
-    collection.each(function(object) {
-     console.log(object);
-      str += object.get("fbId") + "   " + object.get("correctAnswers") + "<br>";
-    });
-    $('#scoreboard').html(str);
-  },
-  error: function(collection, error) {
-    // The collection could not be retrieved.
-  }
-});
-
+function updateScores() {
+  var UserScores = Parse.Collection.extend({
+    model: Parse.User
+  });
+  new UserScores().fetch({
+    success: function(collection) {
+      str = "";
+      collection.each(function(object) {
+       console.log(object);
+        str += object.get("name") + "  :  " + object.get("correctAnswers") + "<br>";
+      });
+      $('#scoreboard').html(str);
+    },
+    error: function(collection, error) {
+      // The collection could not be retrieved.
+    }
+  });
+}
 
 var pagesGrabbed = 0;
 var postslist = [];
@@ -162,5 +161,6 @@ function correctAns(num){
   $('#next').prop('disabled', false);
   alreadyChosen = true;
   chosen = 10;
+  updateScores();
 }
 
