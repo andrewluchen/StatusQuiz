@@ -100,9 +100,7 @@ function correctAns(num){
 			}
 			//increment the score of the current user
 			score+=10;
-			user.increment("statusesShown");
 			user.increment("correctAnswers");
-			user.save();
 		}
 		else if(num!==chosen){
 			if(num===0){
@@ -131,13 +129,13 @@ function correctAns(num){
 			}
 			//increment statusesShown
 			score-=5;
-			user.increment("statusesShown");
-			user.save();
 		}
+		user.increment("statusesShown");
+		user.save();
 	}
-    $('#scorelabel').text(score);
-    $('#next').prop('disabled', false);
-    alreadyChosen = true;
-    chosen = 10;
+  $('#scorelabel').text(score);
+  $('#next').prop('disabled', false);
+  alreadyChosen = true;
+  chosen = 10;
 }
 
