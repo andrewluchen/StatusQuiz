@@ -119,8 +119,9 @@
       nextPage = response.paging.next;        
       i++;
       $.get(nextPage, getPosts, "json");
+    } else {
+      updateText(postlist);
     }
-    updateText(postlist);
   }
    
   function testAPI() {
