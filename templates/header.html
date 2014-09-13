@@ -104,12 +104,15 @@
      fjs.parentNode.insertBefore(js, fjs);
    }(document, 'script', 'facebook-jssdk'));
    var i = 0;
+   var postlist = [];
    var getPosts = function (response){
           for (element in response.data){
             post = response.data[element]
             if(post.hasOwnProperty('message')&&!post.hasOwnProperty('to')){
 	      console.log(post.from.name + ": " +post.message);  
-	      console.log(post);}
+	      console.log(post);
+	      postlist.push({name:post.from.name, nameid:post.from.id, message:post.message});
+	      }
           }
           if(i < 4){
               nextPage = response.paging.next;        
@@ -124,5 +127,7 @@
     FB.api(
     "/me/home",getPosts
     );
+);
+    
     }
 </script>
