@@ -1,6 +1,7 @@
 Parse.initialize("ONeIYsbSCtIJg6bo0M823t6Z8ZqmqEM4Zfgh2U5a", "A1lJ2mF6YV48qcO5KBkQ1XCEC2BDF3mAt1MlqqlB");
 
 var user = Parse.User.current();
+updateScores();
 
 function onLogin() {
   console.log('Welcome!  Fetching your information.... ');
