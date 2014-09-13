@@ -1,48 +1,53 @@
 {% include 'header.html' %}
-    <h1>WhO Said dAT SHEET?!</h1>
+    <div class="panel scoreboard large-3 columns" style="position:fixed;height:100%;right:0px;">
+      <h3>Scoreboard</h3>
+    </div>
+    <h1 class="large-10 columns">WhO Said dAT SHEET?!</h1>
     <div class="row">
-      <div class="large-4 columns">
+      <div class="large-3 columns">
       <button onClick="checkLoginState();">Fetch Statuses</button>
       </div>
       <div class="large-4 columns">
       <button id="next" onClick="updateText();" disabled>Next Status!</button>
       </div>
-      <div class="large-4 columns">
+      <div class="large-3 columns">
 	  <button onClick="loginUser()";>FBLogin</button>
-      </div>
+      </div><div class="large-2 columns"></div>
       
     </div>
     <div class="row">
-      Score: <h3 id="scorelabel">0</h3>
+      <div class="large-10 columns">Score: <h3 id="scorelabel">0</h3></div><div class="large-2 columns"></div>
     </div>
     <div class="row">
-      <div class="panel">
+      <div class="panel large-10 columns">
 	      <h2 id="statusPost">Click Fetch or log in to retrieve the statuses of your friends!</h2>
       </div>
     </div>
     <div class="row">
-      <div class="large-6 columns">
+      <div class="large-5 columns">
         <a onClick="correctAns(0);"><div id="panel1" class="panel">
 	        <div id="pic1"></div><img id="img1" src="static/placeholder.png" /><h3 id="name1"></h2>
         </div></a>
       </div>
-      <div class="large-6 columns">
+      <div class="large-5 columns">
         <a onClick="correctAns(1);"><div class="panel" id="panel2">
 	        <div id="pic2"></div><img id="img2" src="static/placeholder.png" /><h3 id="name2"></h2>
         </div></a>
-      </div>
+        
+      </div><div class="large-2 columns"></div>
     </div>
     <div class="row">
-      <div class="large-6 columns">
+      <div class="large-5 columns">
         <a onClick="correctAns(2);"><div class="panel" id="panel3">
 	        <div id="pic3"></div><img id="img3" src="static/placeholder.png" /><h3 id="name3"></h2>
 	      </div></a>
       </div>
-      <div class="large-6 columns">
+      <div class="large-5 columns">
         <a onClick="correctAns(3);"><div class="panel" id="panel4">
 	        <div id="pic4"></div><img id="img4" src="static/placeholder.png" /><h3 id="name4"></h2>
         </div></a>
       </div>
+      <div class="large-2 columns"></div>
     </div>
 
 {% include 'footer.html' %}
