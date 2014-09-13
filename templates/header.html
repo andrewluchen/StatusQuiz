@@ -4,10 +4,6 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Hello</title>
-    
-    <!-- App Javascript -->
-    <script src="../static/js/app.js"></script>
-
     <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/normalize/3.0.1/normalize.min.css">
     <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/foundation/5.3.0/css/foundation.min.css">
     <script src="http://cdnjs.cloudflare.com/ajax/libs/modernizr/2.8.2/modernizr.min.js"></script>
@@ -18,6 +14,7 @@
     </style>
   </head>
   <body>
+  <script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
   <script>
   function statusChangeCallback(response) {
     console.log('statusChangeCallback');
@@ -92,17 +89,26 @@
      js.src = "//connect.facebook.net/en_US/sdk.js";
      fjs.parentNode.insertBefore(js, fjs);
    }(document, 'script', 'facebook-jssdk'));
+   var i = 0;
+   var getPosts = function (response){
+          for (element in response.data){
+            post = response.data[element]
+            if(post.hasOwnProperty('message'))
+	      console.log(post.from.name + ": " +post.message);          
+          }
+          if(i < 4){
+              nextPage = response.paging.next;        
+              i++;
+              //Method 1: I use it.
+              $.get(nextPage, getPosts, "json"); //optional: $.getJSON can be use instead
+          }
+
+      }
    
    function testAPI() {
     console.log('Welcome!  Fetching your information.... ');
     FB.api(
-    "/me/home",
-    function (response) {
-      if (response && !response.error) {
-        console.log(response);
-      }
-      else{console.log("Error");}
-    }
+    "/me/home",getPosts
     );
     }
 </script>
