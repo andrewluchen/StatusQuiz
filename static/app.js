@@ -3,7 +3,8 @@ Parse.initialize("ONeIYsbSCtIJg6bo0M823t6Z8ZqmqEM4Zfgh2U5a", "A1lJ2mF6YV48qcO5KB
 var prevPosts = [];
 var postslist = null;
 var chosen = 10;
-var alreadyChosen = false;
+var alreadyChosen = true;
+var user = Parse.User.current();
 var score = 0;
 
 function updateText() {
@@ -19,19 +20,19 @@ function updateText() {
   var arr = [];
   for(var i = 0; i < 4; i++) {
     var addpost = function(){
-      arr[i] = postslist[Math.floor((Math.random() * postslist.length))];
-      for(var j = 0;j<i;j++){
-	if(arr[i].nameid === arr[j].nameid){
-	  addpost();
-	}
-      }
+		arr[i] = postslist[Math.floor((Math.random() * postslist.length))];
+		for(var j = 0;j<i;j++){
+			if(arr[i].nameid === arr[j].nameid){
+				addpost();
+			}
+		}
     };
     addpost();
   }
   chosen = Math.floor((Math.random() * 4));
   for(var k = 0;k<prevPosts.length;k++){
-      if(arr[chosen].postid===prevPosts[k])
-	chosen = Math.floor((Math.random() * 4));
+		if(arr[chosen].postid===prevPosts[k])
+			chosen = Math.floor((Math.random() * 4));
   }
   prevPosts.push(chosen);
   var message = arr[chosen].message;
@@ -48,51 +49,57 @@ function updateText() {
 }
 
 function correctAns(num){
-  if(!alreadyChosen){
-      if(num===chosen){
-	if(num===0){
-	  $('#panel1').toggleClass('truebox',true);
+	if(!alreadyChosen){
+		if(num===chosen){
+			if(num===0){
+				$('#panel1').toggleClass('truebox',true);
+			}
+			else if(num===1){
+				$('#panel2').toggleClass('truebox',true);
+			}
+			else if(num===2){
+				$('#panel3').toggleClass('truebox',true);
+			}
+			else if(num===3){
+				$('#panel4').toggleClass('truebox',true);
+			}
+			//increment the score of the current user
+			score+=10;
+			user.increment("statusesShown");
+			user.increment("correctAnswers");
+			user.save();
+		}
+		else if(num!==chosen){
+			if(num===0){
+			$('#panel1').toggleClass('falsebox',true);
+			}
+			else if(num===1){
+			$('#panel2').toggleClass('falsebox',true);
+			}
+			else if(num===2){
+			$('#panel3').toggleClass('falsebox',true);
+			}
+			else if(num===3){
+			  $('#panel4').toggleClass('falsebox',true);
+			}
+			if(chosen===0){
+			  $('#panel1').toggleClass('truebox',true);
+			}
+			else if(chosen===1){
+			  $('#panel2').toggleClass('truebox',true);
+			}
+			else if(chosen===2){
+			  $('#panel3').toggleClass('truebox',true);
+			}
+			else if(chosen===3){
+			  $('#panel4').toggleClass('truebox',true);
+			}
+			//increment statusesShown
+			score-=5;
+			user.increment("statusesShown");
+			user.save();
+		}
 	}
-	else if(num===1){
-	  $('#panel2').toggleClass('truebox',true);
-	}
-	else if(num===2){
-	  $('#panel3').toggleClass('truebox',true);
-	}
-	else if(num===3){
-	  $('#panel4').toggleClass('truebox',true);
-	}
-	score+=10;
-	
-      }
-      else if(num!==chosen){
-	if(num===0){
-	  $('#panel1').toggleClass('falsebox',true);
-	}
-	else if(num===1){
-	  $('#panel2').toggleClass('falsebox',true);
-	}
-	else if(num===2){
-	  $('#panel3').toggleClass('falsebox',true);
-	}
-	else if(num===3){
-	  $('#panel4').toggleClass('falsebox',true);
-	}
-	if(chosen===0){
-	  $('#panel1').toggleClass('truebox',true);
-	}
-	else if(chosen===1){
-	  $('#panel2').toggleClass('truebox',true);
-	}
-	else if(chosen===2){
-	  $('#panel3').toggleClass('truebox',true);
-	}
-	else if(chosen===3){
-	  $('#panel4').toggleClass('truebox',true);
-	}
-	score-=5;
-      }
-    }
     $('#scorelabel').text(score);
     $('#next').prop('disabled', false);
     alreadyChosen = true;

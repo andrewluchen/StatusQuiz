@@ -36,6 +36,8 @@
   <body>
   <script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
   <script>
+  Parse.initialize("ONeIYsbSCtIJg6bo0M823t6Z8ZqmqEM4Zfgh2U5a", "A1lJ2mF6YV48qcO5KBkQ1XCEC2BDF3mAt1MlqqlB");
+  
   function statusChangeCallback(response) {
     console.log('statusChangeCallback');
     console.log(response);
@@ -67,15 +69,53 @@
       statusChangeCallback(response);
     });
   }
-
+  
   window.fbAsyncInit = function() {
+    Parse.FacebookUtils.init({
+      appId      : '716803755036252',
+	  cookie     : true,  // enable cookies to allow the server to access 
+                        // the session
+      xfbml      : true,
+      version    : 'v2.1'
+    });
+  };
+  
+  function loginUser() {
+	Parse.FacebookUtils.logIn("public_profile,email,read_stream,user_friends", {
+		success: function(user) {
+			console.log("inside login, succeeded");
+			if (!user.existed()) {
+				console.log("inside login, !user_existed");
+				checkLoginState();
+			} else {
+				//link user to FB
+				if (!Parse.FacebookUtils.isLinked(user)) {
+				  Parse.FacebookUtils.link(user, null, {
+					success: function(user) {
+						//successfully linked
+						checkLoginState();
+					},
+					error: function(user, error) {
+					  alert("User cancelled the Facebook login or did not fully authorize.");
+					}
+				  });
+				}
+			}
+		},
+		error: function(user, error) {
+			console.log("inside login, succeeded, error");
+		}
+	});
+  };
+
+  /*window.fbAsyncInit = function() {
   FB.init({
     appId      : '{your-app-id}',
     cookie     : true,  // enable cookies to allow the server to access 
                         // the session
     xfbml      : true,  // parse social plugins on this page
     version    : 'v2.1' // use version 2.1
-  });
+  }); */
 
   // Now that we've initialized the JavaScript SDK, we call 
   // FB.getLoginStatus().  This function gets the state of the
@@ -89,19 +129,10 @@
   //
   // These three cases are handled in the callback function.
 
-  FB.getLoginStatus(function(response) {
-    statusChangeCallback(response);
-  });
-
-  };
-
-  window.fbAsyncInit = function() {
-    FB.init({
-      appId      : '716803755036252',
-      xfbml      : true,
-      version    : 'v2.1'
-    });
-  };
+  /*FB.getLoginStatus(function(response) {
+	statusChangeCallback(response);
+	});
+}; */
 
   (function(d, s, id){
      var js, fjs = d.getElementsByTagName(s)[0];
