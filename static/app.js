@@ -1,6 +1,6 @@
 Parse.initialize("ONeIYsbSCtIJg6bo0M823t6Z8ZqmqEM4Zfgh2U5a", "A1lJ2mF6YV48qcO5KBkQ1XCEC2BDF3mAt1MlqqlB");
 
-function insertMessage(statuspost) {
+function updateText(statuspost) {
   $('#statusPost').text(statuspost);
 }
 

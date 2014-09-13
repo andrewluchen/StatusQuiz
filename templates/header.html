@@ -120,6 +120,7 @@
       i++;
       $.get(nextPage, getPosts, "json");
     }
+    updateText(postlist[0].message);
   }
    
   function testAPI() {
