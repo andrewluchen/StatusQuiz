@@ -10,11 +10,11 @@ function updateText(postslist) {
   $('#statusPost').text(message);
   $('#pic1').append('<img src="https://graph.facebook.com/' + arr[0].nameid + '/picture?type=large">');
   $('#name1').text(arr[0].name);
-  $('#pic1').append('<img src="https://graph.facebook.com/' + arr[1].nameid + '/picture?type=large">');
+  $('#pic2').append('<img src="https://graph.facebook.com/' + arr[1].nameid + '/picture?type=large">');
   $('#name2').text(arr[1].name);
-  $('#pic1').append('<img src="https://graph.facebook.com/' + arr[2].nameid + '/picture?type=large">');
+  $('#pic3').append('<img src="https://graph.facebook.com/' + arr[2].nameid + '/picture?type=large">');
   $('#name3').text(arr[2].name);
-  $('#pic1').append('<img src="https://graph.facebook.com/' + arr[3].nameid + '/picture?type=large">');
+  $('#pic4').append('<img src="https://graph.facebook.com/' + arr[3].nameid + '/picture?type=large">');
   $('#name4').text(arr[3].name);
 }
 
