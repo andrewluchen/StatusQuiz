@@ -14,6 +14,26 @@ function onLogin() {
   fetchStatuses();
 }
 
+// Scoreboard stuff
+
+var UserScores = Parse.Collection.extend({
+  model: Parse.User
+});
+
+new UserScores().fetch({
+  success: function(collection) {
+    str = "";
+    collection.each(function(object) {
+     console.log(object);
+      str += object.get("fbId") + "   " + object.get("correctAnswers") + "<br>";
+    });
+    $('#scoreboard').html(str);
+  },
+  error: function(collection, error) {
+    // The collection could not be retrieved.
+  }
+});
+
 
 var pagesGrabbed = 0;
 var postslist = [];
