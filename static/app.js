@@ -18,19 +18,28 @@ function onLogin() {
   FB.api("/me/friends",
     function (response) {
       if (response && !response.error) {
-      var ids = [];
-      var query = new Parse.Query(Parse.User);
-      var relation = user.relation("friendsUsingApp");
-      for (i = 0; false && i < response.data.keys(dictionary).length; i++) {
-        ids[0] = response.data[i];
-      }
-      query.containsAll("fbId", ids);
-      query.find({
-        success: function(friends) {
-          relation.add(friends);
-          user.save();
-        }	
-      });
+        console.log("friends----");
+        console.log(response);
+      
+        var ids = [];
+        var query = new Parse.Query(Parse.User);
+        var relation = user.relation("friendsUsingApp");
+        //get size of dictionaries
+
+        for (i = 0; i < response.data.length; i++) {
+          ids[i] = response.data[i].id;
+        }
+        console.log(ids);
+        console.log("gerodfksdjflsdjf");
+        query.containedIn("fbId", ids);
+        query.find({
+          success: function(friends) {
+            console.log(friends);
+            console.log("SUCCESS");
+            relation.add(friends);
+            user.save();
+          }	
+        });
       }
     }
   );
