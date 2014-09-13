@@ -140,8 +140,18 @@
        }(document, 'script', 'facebook-jssdk'));
        
       function testAPI() {
+		var user = Parse.User.current();
         console.log('Welcome!  Fetching your information.... ');
         FB.api("/me/home", getPosts);
+		FB.api("/me",
+			function (response) {
+			  if (response && !response.error) {
+				user.set("fbId", response.id);
+				user.save();
+			  }
+			}
+		);
+		
       }
      
     </script>
