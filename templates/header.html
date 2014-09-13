@@ -44,7 +44,7 @@
         // for FB.getLoginStatus().
         if (response.status === 'connected') {
           // Logged into your app and Facebook.
-          testAPI();
+          onLogin();
         } else if (response.status === 'not_authorized') {
           // The person is logged into Facebook, but not your app.
           document.getElementById('status').innerHTML = 'Please log ' +
@@ -61,7 +61,6 @@
       // Button.  See the onlogin handler attached to it in the sample
       // code below.
       function checkLoginState() {
-        $('#statusPost').text("Loading your friends' statuses...");
         FB.getLoginStatus(function(response) {
           statusChangeCallback(response);
         });
@@ -70,66 +69,28 @@
       window.fbAsyncInit = function() {
         Parse.FacebookUtils.init({
           appId      : '716803755036252',
-	      cookie     : true,  // enable cookies to allow the server to access 
-                            // the session
+	        cookie     : true,  // enable cookies to allow the server to access the session
           xfbml      : true,
           version    : 'v2.1'
         });
-      };
-      
-      function loginUser() {
-	    Parse.FacebookUtils.logIn("public_profile,email,read_stream,user_friends", {
-		    success: function(user) {
-			    console.log("inside login, succeeded");
-			    if (!user.existed()) {
-				    console.log("inside login, !user_existed");
-				    checkLoginState();
-			    } else {
-				    //link user to FB
-				    if (!Parse.FacebookUtils.isLinked(user)) {
-				      Parse.FacebookUtils.link(user, null, {
-					    success: function(user) {
-						    //successfully linked
-						    checkLoginState();
-					    },
-					    error: function(user, error) {
-					      alert("User cancelled the Facebook login or did not fully authorize.");
-					    }
-				      });
-				    }
-			    }
-		    },
-		    error: function(user, error) {
-			    console.log("inside login, succeeded, error");
-		    }
-	    });
-      };
 
-      /*window.fbAsyncInit = function() {
-        FB.init({
-          appId      : '{your-app-id}',
-          cookie     : true,  // enable cookies to allow the server to access 
-                              // the session
-          xfbml      : true,  // parse social plugins on this page
-          version    : 'v2.1' // use version 2.1
-        });
-
-      // Now that we've initialized the JavaScript SDK, we call 
-      // FB.getLoginStatus().  This function gets the state of the
-      // person visiting this page and can return one of three states to
-      // the callback you provide.  They can be:
-      //
-      // 1. Logged into your app ('connected')
-      // 2. Logged into Facebook, but not your app ('not_authorized')
-      // 3. Not logged into Facebook and can't tell if they are logged into
-      //    your app or not.
-      //
-      // These three cases are handled in the callback function.
+        // Now that we've initialized the JavaScript SDK, we call 
+        // FB.getLoginStatus().  This function gets the state of the
+        // person visiting this page and can return one of three states to
+        // the callback you provide.  They can be:
+        //
+        // 1. Logged into your app ('connected')
+        // 2. Logged into Facebook, but not your app ('not_authorized')
+        // 3. Not logged into Facebook and can't tell if they are logged into
+        //    your app or not.
+        //
+        // These three cases are handled in the callback function.
 
         FB.getLoginStatus(function(response) {
-	        statusChangeCallback(response);
-	      });
-      }; */
+          statusChangeCallback(response);
+        });
+
+      };
 
       (function(d, s, id){
          var js, fjs = d.getElementsByTagName(s)[0];
@@ -138,10 +99,35 @@
          js.src = "//connect.facebook.net/en_US/sdk.js";
          fjs.parentNode.insertBefore(js, fjs);
        }(document, 'script', 'facebook-jssdk'));
-       
-      function testAPI() {
-        console.log('Welcome!  Fetching your information.... ');
-        FB.api("/me/home", getPosts);
-      }
+      
+      function loginUser() {
+	      Parse.FacebookUtils.logIn("public_profile,email,read_stream,user_friends", {
+		      success: function(user) {
+			      if (!user.existed()) {
+				      console.log("User signed up and logged in through Facebook!");
+			      } else {
+			        console.log("User logged in through Facebook!");
+			      }
+			      
+			      //link FB User with Parse
+			      if (!Parse.FacebookUtils.isLinked(user)) {
+			        Parse.FacebookUtils.link(user, null, {
+				        success: function(user) {
+  				        console.log("Woohoo, user logged in with Facebook!");
+				        },
+				        error: function(user, error) {
+				          console.log("User cancelled the Facebook login or did not fully authorize.");
+				        }
+			        });
+			      }
+			      
+			      checkLoginState();
+			      
+		      },
+		      error: function(user, error) {
+			      console.log("User cancelled the Facebook login or did not fully authorize.");
+		      }
+	      });
+      };
      
     </script>

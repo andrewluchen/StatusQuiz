@@ -2,8 +2,24 @@ Parse.initialize("ONeIYsbSCtIJg6bo0M823t6Z8ZqmqEM4Zfgh2U5a", "A1lJ2mF6YV48qcO5KB
 
 var pagesGrabbed = 0;
 var postslist = [];
+var user = Parse.User.current();
+       
+function onLogin() {
+  console.log('Welcome!  Fetching your information.... ');
+  
+  user = Parse.User.current();
+  user.set("fbId", user.getUsername());
+  
+  fetchStatuses();
+}
+
+function fetchStatuses() {
+  FB.api("/me/home", getPosts);
+}
 
 function getPosts(response){
+  $('#statusPost').text("Loading your friends' statuses...");
+  
   for (element in response.data){
     post = response.data[element]
     if(post.hasOwnProperty('message')&&!post.hasOwnProperty('to')&&!post.from.hasOwnProperty('category')){
@@ -24,7 +40,6 @@ function getPosts(response){
 var prevPosts = [];
 var chosen = 10;
 var alreadyChosen = true;
-var user = Parse.User.current();
 var score = 0;
 
 function updateText() {
@@ -124,22 +139,5 @@ function correctAns(num){
     $('#next').prop('disabled', false);
     alreadyChosen = true;
     chosen = 10;
-}
-
-
-function test(){
-  var TestObject = Parse.Object.extend("TestObject");
-
-  var testObject = new TestObject();
-  testObject.save({foo: "bar"},
-    {
-      success: function(object) {
-        alert("success");
-      },
-      error: function(model, error) {
-        alert("error");
-      }
-    }
-  );
 }
 
