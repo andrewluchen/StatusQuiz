@@ -57,8 +57,6 @@ function updateScores() {
   str += "My score  :  " + user.get("accuracy") + "% accuracy<br><br>";
   collection.fetch({
     success: function(friends) {
-      console.log("friendsUsingApp");
-      console.log(friends)
       friends.each(function(object) {
         str += object.get("name") + "  :  " + object.get("accuracy") + "% accuracy<br>";
       });
@@ -70,28 +68,29 @@ function updateScores() {
   });  
 }
 
-var pagesGrabbed = 0;
 var postslist = [];
+var nextPage = null;
 
 function fetchStatuses() {
   $('#statusPost').text("Loading your friends' statuses...");
-  FB.api("/me/home", getPosts);
+  if(nextPage == null) {
+    FB.api("/me/home", getPosts);
+  } else {
+    $.get(nextPage, getPosts, "json");
+  }
 }
 
 function getPosts(response){
-  for (element in response.data){
-    post = response.data[element]
-    if(post.hasOwnProperty('message')&&!post.hasOwnProperty('to')&&!post.from.hasOwnProperty('category')){
-      //console.log(post.from.name + ": " +post.message);  
-      //console.log(post);
-      postslist.push({name:post.from.name, nameid:post.from.id, message:post.message, postid:post.id});
+  if(response && !response.error) {
+    for(element in response.data){
+      post = response.data[element]
+      if(post.hasOwnProperty('message')&&!post.hasOwnProperty('to')&&!post.from.hasOwnProperty('category')){
+        //console.log(post.from.name + ": " +post.message);  
+        //console.log(post);
+        postslist.push({name:post.from.name, nameid:post.from.id, message:post.message, postid:post.id});
+      }
     }
-  }
-  if(pagesGrabbed < 4){
-    nextPage = response.paging.next;        
-    pagesGrabbed++;
-    $.get(nextPage, getPosts, "json");
-  } else {
+    nextPage = response.paging.next;
     updateText();
   }
 }
@@ -115,7 +114,7 @@ function updateText() {
   for(var i = 0; i < 4; i++) {
     var addpost = function(){
 		  arr[i] = postslist[Math.floor((Math.random() * postslist.length))];
-		  for(var j = 0;j<i;j++){
+		  for(var j = 0; j < i ; j++){
 			  if(arr[i].nameid === arr[j].nameid){
 				  addpost();
 			  }
