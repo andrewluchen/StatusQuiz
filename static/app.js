@@ -8,9 +8,10 @@ function onLogin() {
   FB.api("/me", function (response) {
     if (response && !response.error) {
       user.set("fbId", response.id);
-      user.set("name", response.first_name + " " + response.last_name);
+      user.set("name", response.name);
       user.save(); 
     }
+    //console.log(response);
   });
   fetchStatuses();
 }
@@ -23,7 +24,6 @@ function updateScores() {
     success: function(collection) {
       str = "";
       collection.each(function(object) {
-       console.log(object);
         str += object.get("name") + "  :  " + object.get("correctAnswers") + "<br>";
       });
       $('#scoreboard').html(str);
@@ -47,8 +47,8 @@ function getPosts(response){
   for (element in response.data){
     post = response.data[element]
     if(post.hasOwnProperty('message')&&!post.hasOwnProperty('to')&&!post.from.hasOwnProperty('category')){
-      console.log(post.from.name + ": " +post.message);  
-      console.log(post);
+      //console.log(post.from.name + ": " +post.message);  
+      //console.log(post);
       postslist.push({name:post.from.name, nameid:post.from.id, message:post.message, postid:post.id});
     }
   }
