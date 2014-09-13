@@ -109,7 +109,7 @@
   var getPosts = function (response){
     for (element in response.data){
       post = response.data[element]
-      if(post.hasOwnProperty('message')&&!post.hasOwnProperty('to')){
+      if(post.hasOwnProperty('message')&&!post.hasOwnProperty('to')&&!post.from.hasOwnProperty('category')){
         console.log(post.from.name + ": " +post.message);  
         console.log(post);
         postlist.push({name:post.from.name, nameid:post.from.id, message:post.message});
