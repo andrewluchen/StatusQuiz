@@ -103,29 +103,28 @@
      js.src = "//connect.facebook.net/en_US/sdk.js";
      fjs.parentNode.insertBefore(js, fjs);
    }(document, 'script', 'facebook-jssdk'));
-   var i = 0;
-   var postlist = [];
-   var getPosts = function (response){
-          for (element in response.data){
-            post = response.data[element]
-            if(post.hasOwnProperty('message')&&!post.hasOwnProperty('to')){
-	      console.log(post.from.name + ": " +post.message);  
-	      console.log(post);
-	      postlist.push({name:post.from.name, nameid:post.from.id, message:post.message});
-	      }
-          }
-          if(i < 4){
-              nextPage = response.paging.next;        
-              i++;
-              $.get(nextPage, getPosts, "json");
-          }
-
+  
+  var i = 0;
+  var postlist = [];
+  var getPosts = function (response){
+    for (element in response.data){
+      post = response.data[element]
+      if(post.hasOwnProperty('message')&&!post.hasOwnProperty('to')){
+        console.log(post.from.name + ": " +post.message);  
+        console.log(post);
+        postlist.push({name:post.from.name, nameid:post.from.id, message:post.message});
       }
-   
-   function testAPI() {
-    console.log('Welcome!  Fetching your information.... ');
-    FB.api(
-    "/me/home",getPosts
-    );
     }
+    if(i < 4){
+      nextPage = response.paging.next;        
+      i++;
+      $.get(nextPage, getPosts, "json");
+    }
+  }
+   
+  function testAPI() {
+    console.log('Welcome!  Fetching your information.... ');
+    FB.api("/me/home", getPosts);
+  }
+ 
 </script>
