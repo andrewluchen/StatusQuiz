@@ -114,12 +114,12 @@ function updateText() {
   var arr = [];
   for(var i = 0; i < 4; i++) {
     var addpost = function(){
-		arr[i] = postslist[Math.floor((Math.random() * postslist.length))];
-		for(var j = 0;j<i;j++){
-			if(arr[i].nameid === arr[j].nameid){
-				addpost();
-			}
-		}
+		  arr[i] = postslist[Math.floor((Math.random() * postslist.length))];
+		  for(var j = 0;j<i;j++){
+			  if(arr[i].nameid === arr[j].nameid){
+				  addpost();
+			  }
+		  }
     };
     addpost();
   }
@@ -157,10 +157,8 @@ function correctAns(num){
 			else if(num===3){
 				$('#panel4').toggleClass('truebox',true);
 			}
-			//increment the score of the current user
 			score+=10;
 			user.increment("correctAnswers");
-      
 		}
 		else if(num!==chosen){
 			if(num===0){
@@ -187,23 +185,10 @@ function correctAns(num){
 			else if(chosen===3){
 			  $('#panel4').toggleClass('truebox',true);
 			}
-			//increment statusesShown
 			score-=5;
 		}
     user.increment("statusesShown");
-    var correctAnswers = user.get("correctAnswers");
-    if (!correctAnswers) {
-      correctAnswers = 0;
-    }
-
-    var statusesShown = user.get("statusesShown");
-    if (!statusesShown) {
-      statusesShown = 1;
-    }
-    
-    var accuracy = correctAnswers / (statusesShown) * 100;
-    
-    user.set("accuracy", Math.round(accuracy));
+    user.set("accuracy", Math.round(correctAnswers / (statusesShown) * 100));
 		user.save();
 	}
   $('#scorelabel').text(score);
