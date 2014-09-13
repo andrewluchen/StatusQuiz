@@ -10,6 +10,9 @@ function onLogin() {
     if (response && !response.error) {
       user.set("fbId", response.id);
       user.set("name", response.name);
+      if(user.get("statusesShown" == 0)) {
+        user.set("accuracy", 0);
+      }
       user.save(); 
     }
     //console.log(response);
@@ -48,21 +51,22 @@ function onLogin() {
 }
 
 function updateScores() {
-  var UserScores = Parse.Collection.extend({
-    model: Parse.User
-  });
-  new UserScores().fetch({
-    success: function(collection) {
-      str = "";
-      collection.each(function(object) {
-        str += object.get("name") + "  :  " + object.get("correctAnswers") + "<br>";
+  var relation = user.relation("friendsUsingApp");
+  var collection = relation.query().descending("accuracy").collection();
+  var str = '';
+  collection.fetch({
+    success: function(friends) {
+      console.log("friendsUsingApp");
+      console.log(friends)
+      friends.each(function(object) {
+        str += object.get("name") + "  :  " + object.get("accuracy") + "% accuracy<br>";
       });
       $('#scoreboard').html(str);
     },
     error: function(collection, error) {
       // The collection could not be retrieved.
     }
-  });
+  });  
 }
 
 var pagesGrabbed = 0;
@@ -110,12 +114,12 @@ function updateText() {
   var arr = [];
   for(var i = 0; i < 4; i++) {
     var addpost = function(){
-		arr[i] = postslist[Math.floor((Math.random() * postslist.length))];
-		for(var j = 0;j<i;j++){
-			if(arr[i].nameid === arr[j].nameid){
-				addpost();
-			}
-		}
+		  arr[i] = postslist[Math.floor((Math.random() * postslist.length))];
+		  for(var j = 0;j<i;j++){
+			  if(arr[i].nameid === arr[j].nameid){
+				  addpost();
+			  }
+		  }
     };
     addpost();
   }
@@ -153,7 +157,6 @@ function correctAns(num){
 			else if(num===3){
 				$('#panel4').toggleClass('truebox',true);
 			}
-			//increment the score of the current user
 			score+=10;
 			user.increment("correctAnswers");
 		}
@@ -182,10 +185,10 @@ function correctAns(num){
 			else if(chosen===3){
 			  $('#panel4').toggleClass('truebox',true);
 			}
-			//increment statusesShown
 			score-=5;
 		}
-		user.increment("statusesShown");
+    user.increment("statusesShown");
+    user.set("accuracy", Math.round(correctAnswers / (statusesShown) * 100));
 		user.save();
 	}
   $('#scorelabel').text(score);
