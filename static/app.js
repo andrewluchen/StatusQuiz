@@ -54,6 +54,7 @@ function updateScores() {
   var relation = user.relation("friendsUsingApp");
   var collection = relation.query().descending("accuracy").collection();
   var str = '';
+  str += "My score  :  " + user.get("accuracy") + "% accuracy<br><br>";
   collection.fetch({
     success: function(friends) {
       console.log("friendsUsingApp");
