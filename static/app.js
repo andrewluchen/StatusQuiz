@@ -1,28 +1,24 @@
 Parse.initialize("ONeIYsbSCtIJg6bo0M823t6Z8ZqmqEM4Zfgh2U5a", "A1lJ2mF6YV48qcO5KBkQ1XCEC2BDF3mAt1MlqqlB");
 
-var pagesGrabbed = 0;
-var postslist = [];
 var user = Parse.User.current();
-       
+
 function onLogin() {
   console.log('Welcome!  Fetching your information.... ');
   
-  user = Parse.User.current();
-  fetchStatuses();
-}
-
-function fetchStatuses() {
   FB.api("/me", function (response) {
     if (response && !response.error) {
       user.set("fbId", response.id);
       user.save(); 
     }
   });
-  FB.api("/me/friends", function (response) {
-    if (response && !response.error) {
-    }
-  });
-  
+  fetchStatuses();
+}
+
+
+var pagesGrabbed = 0;
+var postslist = [];
+
+function fetchStatuses() {
   FB.api("/me/home", getPosts);
 }
 
