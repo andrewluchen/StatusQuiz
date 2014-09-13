@@ -48,13 +48,14 @@ function onLogin() {
 }
 
 function updateScores() {
-  var UserScores = Parse.Collection.extend({
-    model: Parse.User
-  });
-  new UserScores().fetch({
-    success: function(collection) {
-      str = "";
-      collection.each(function(object) {
+  var relation = user.relation("friendsUsingApp");
+  var collection = relation.query().collection();
+  console.log("friendsUsingApp");
+  var str = '';
+  console.log(collection);
+  collection.fetch({
+    success: function(friends) {
+      friends.each(function(object) {
         var correctAnswers = object.get("correctAnswers");
         if (!correctAnswers) {
           correctAnswers = 0;
@@ -73,7 +74,7 @@ function updateScores() {
     error: function(collection, error) {
       // The collection could not be retrieved.
     }
-  });
+  });  
 }
 
 var pagesGrabbed = 0;
