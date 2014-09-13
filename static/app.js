@@ -7,15 +7,15 @@ function updateText(postslist) {
   }
   var chosen = Math.floor((Math.random() * 4));
   var message = arr[chosen].message + " answer:" + arr[chosen].name;
-  var person1 = arr[0].name;
-  var person2 = arr[1].name;
-  var person3 = arr[2].name;
-  var person4 = arr[3].name;
   $('#statusPost').text(message);
-  $('#pic1').text(person1);
-  $('#pic2').text(person2);
-  $('#pic3').text(person3);
-  $('#pic4').text(person4);
+  $('#pic1').append('<img src="https://graph.facebook.com/' + arr[0].nameid + '/picture?type=large">');
+  $('#name1').text(arr[0].name);
+  $('#pic1').append('<img src="https://graph.facebook.com/' + arr[1].nameid + '/picture?type=large">');
+  $('#name2').text(arr[1].name);
+  $('#pic1').append('<img src="https://graph.facebook.com/' + arr[2].nameid + '/picture?type=large">');
+  $('#name3').text(arr[2].name);
+  $('#pic1').append('<img src="https://graph.facebook.com/' + arr[3].nameid + '/picture?type=large">');
+  $('#name4').text(arr[3].name);
 }
 
 function test(){
