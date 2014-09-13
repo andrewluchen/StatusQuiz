@@ -55,7 +55,18 @@ function updateScores() {
     success: function(collection) {
       str = "";
       collection.each(function(object) {
-        str += object.get("name") + "  :  " + object.get("correctAnswers") + "<br>";
+        var correctAnswers = object.get("correctAnswers");
+        if (!correctAnswers) {
+          correctAnswers = 0;
+        }
+  
+        var statusesShown = object.get("statusesShown");
+        if (!statusesShown) {
+          statusesShown = 1;
+        }
+        
+        var accuracy = correctAnswers / (statusesShown) * 100;
+        str += object.get("name") + "  :  " + Math.round(accuracy) + "% accuracy<br>";
       });
       $('#scoreboard').html(str);
     },
