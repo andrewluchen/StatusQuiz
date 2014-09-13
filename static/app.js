@@ -1,14 +1,75 @@
 Parse.initialize("ONeIYsbSCtIJg6bo0M823t6Z8ZqmqEM4Zfgh2U5a", "A1lJ2mF6YV48qcO5KBkQ1XCEC2BDF3mAt1MlqqlB");
 
+var user = Parse.User.current();
+
+function onLogin() {
+  console.log('Welcome!  Fetching your information.... ');
+  
+  FB.api("/me", function (response) {
+    if (response && !response.error) {
+      user.set("fbId", response.id);
+      user.set("name", response.name);
+      user.save(); 
+    }
+    //console.log(response);
+  });
+  
+  FB.api("/me/friends",
+    function (response) {
+      if (response && !response.error) {
+      var ids = [];
+      var query = new Parse.Query(Parse.User);
+      var relation = user.relation("friendsUsingApp");
+      for (i = 0; false && i < response.data.keys(dictionary).length; i++) {
+        ids[0] = response.data[i];
+      }
+      query.containsAll("fbId", ids);
+      query.find({
+        success: function(friends) {
+          relation.add(friends);
+          user.save();
+        }	
+      });
+      }
+    }
+  );
+  
+  fetchStatuses();
+}
+
+function updateScores() {
+  var UserScores = Parse.Collection.extend({
+    model: Parse.User
+  });
+  new UserScores().fetch({
+    success: function(collection) {
+      str = "";
+      collection.each(function(object) {
+        str += object.get("name") + "  :  " + object.get("correctAnswers") + "<br>";
+      });
+      $('#scoreboard').html(str);
+    },
+    error: function(collection, error) {
+      // The collection could not be retrieved.
+    }
+  });
+}
+
 var pagesGrabbed = 0;
 var postslist = [];
 
+function fetchStatuses() {
+  FB.api("/me/home", getPosts);
+}
+
 function getPosts(response){
+  $('#statusPost').text("Loading your friends' statuses...");
+  
   for (element in response.data){
     post = response.data[element]
     if(post.hasOwnProperty('message')&&!post.hasOwnProperty('to')&&!post.from.hasOwnProperty('category')){
-      console.log(post.from.name + ": " +post.message);  
-      console.log(post);
+      //console.log(post.from.name + ": " +post.message);  
+      //console.log(post);
       postslist.push({name:post.from.name, nameid:post.from.id, message:post.message, postid:post.id});
     }
   }
@@ -24,7 +85,6 @@ function getPosts(response){
 var prevPosts = [];
 var chosen = 10;
 var alreadyChosen = true;
-var user = Parse.User.current();
 var score = 0;
 
 function updateText() {
@@ -85,9 +145,7 @@ function correctAns(num){
 			}
 			//increment the score of the current user
 			score+=10;
-			user.increment("statusesShown");
 			user.increment("correctAnswers");
-			user.save();
 		}
 		else if(num!==chosen){
 			if(num===0){
@@ -116,30 +174,14 @@ function correctAns(num){
 			}
 			//increment statusesShown
 			score-=5;
-			user.increment("statusesShown");
-			user.save();
 		}
+		user.increment("statusesShown");
+		user.save();
 	}
-    $('#scorelabel').text(score);
-    $('#next').prop('disabled', false);
-    alreadyChosen = true;
-    chosen = 10;
-}
-
-
-function test(){
-  var TestObject = Parse.Object.extend("TestObject");
-
-  var testObject = new TestObject();
-  testObject.save({foo: "bar"},
-    {
-      success: function(object) {
-        alert("success");
-      },
-      error: function(model, error) {
-        alert("error");
-      }
-    }
-  );
+  $('#scorelabel').text(score);
+  $('#next').prop('disabled', false);
+  alreadyChosen = true;
+  chosen = 10;
+  updateScores();
 }
 
