@@ -10,6 +10,9 @@ function onLogin() {
     if (response && !response.error) {
       user.set("fbId", response.id);
       user.set("name", response.name);
+      if(user.get("statusesShown" == 0)) {
+        user.set("accuracy", 0);
+      }
       user.save(); 
     }
     //console.log(response);
@@ -49,25 +52,14 @@ function onLogin() {
 
 function updateScores() {
   var relation = user.relation("friendsUsingApp");
-  var collection = relation.query().collection();
-  console.log("friendsUsingApp");
+  var collection = relation.query().descending("accuracy").collection();
   var str = '';
-  console.log(collection);
   collection.fetch({
     success: function(friends) {
+      console.log("friendsUsingApp");
+      console.log(friends)
       friends.each(function(object) {
-        var correctAnswers = object.get("correctAnswers");
-        if (!correctAnswers) {
-          correctAnswers = 0;
-        }
-  
-        var statusesShown = object.get("statusesShown");
-        if (!statusesShown) {
-          statusesShown = 1;
-        }
-        
-        var accuracy = correctAnswers / (statusesShown) * 100;
-        str += object.get("name") + "  :  " + Math.round(accuracy) + "% accuracy<br>";
+        str += object.get("name") + "  :  " + object.get("accuracy") + "% accuracy<br>";
       });
       $('#scoreboard').html(str);
     },
@@ -168,6 +160,7 @@ function correctAns(num){
 			//increment the score of the current user
 			score+=10;
 			user.increment("correctAnswers");
+      
 		}
 		else if(num!==chosen){
 			if(num===0){
@@ -197,7 +190,20 @@ function correctAns(num){
 			//increment statusesShown
 			score-=5;
 		}
-		user.increment("statusesShown");
+    user.increment("statusesShown");
+    var correctAnswers = user.get("correctAnswers");
+    if (!correctAnswers) {
+      correctAnswers = 0;
+    }
+
+    var statusesShown = user.get("statusesShown");
+    if (!statusesShown) {
+      statusesShown = 1;
+    }
+    
+    var accuracy = correctAnswers / (statusesShown) * 100;
+    
+    user.set("accuracy", Math.round(accuracy));
 		user.save();
 	}
   $('#scorelabel').text(score);
