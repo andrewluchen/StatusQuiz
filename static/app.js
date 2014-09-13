@@ -74,12 +74,11 @@ var pagesGrabbed = 0;
 var postslist = [];
 
 function fetchStatuses() {
+  $('#statusPost').text("Loading your friends' statuses...");
   FB.api("/me/home", getPosts);
 }
 
 function getPosts(response){
-  $('#statusPost').text("Loading your friends' statuses...");
-  
   for (element in response.data){
     post = response.data[element]
     if(post.hasOwnProperty('message')&&!post.hasOwnProperty('to')&&!post.from.hasOwnProperty('category')){
